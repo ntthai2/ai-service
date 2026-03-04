@@ -1,14 +1,13 @@
-from transformers import pipeline
-
-classifier = None
-
 def load_model():
-    global classifier
-    classifier = pipeline(
-        "sentiment-analysis",
-        model="distilbert-base-uncased-finetuned-sst-2-english"
-    )
+    pass
 
 def predict_text(text: str):
-    result = classifier(text)[0]
-    return result["label"], float(result["score"])
+    from textblob import TextBlob
+    blob = TextBlob(text)
+    polarity = blob.sentiment.polarity
+    if polarity > 0:
+        label = "POSITIVE"
+    else:
+        label = "NEGATIVE"
+    score = abs(polarity)
+    return label, score
